@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 
+
 class ReturnPiece {
 	static enum PieceType {WP, WR, WN, WB, WQ, WK, 
 		            BP, BR, BN, BB, BK, BQ};
@@ -35,9 +36,8 @@ class ReturnPlay {
 }
 
 public class Chess {
-	
 	enum Player { white, black }
-	
+	public ReturnPiece[][] board = new ReturnPiece[8][8];
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -61,6 +61,37 @@ public class Chess {
 	 * This method should reset the game, and start from scratch.
 	 */
 	public static void start() {
+		
 		/* FILL IN THIS METHOD */
+}
+
+public void makeBoard(){
+	for (int i = 0; i < 8; i++){
+		for (int j = 0; j < 8; j++){
+			board[i][j] = new ReturnPiece();
+		}
+		
 	}
+	for (int i = 0; i <8; i++){
+		for (int j = 0; j < 8; j++){
+			board[i][j].pieceRank = i +1;
+			switch (j) {
+                case 0: board[i][j].pieceFile = ReturnPiece.PieceFile.a; break;
+                case 1: board[i][j].pieceFile = ReturnPiece.PieceFile.b; break;
+                case 2: board[i][j].pieceFile = ReturnPiece.PieceFile.c; break;
+                case 3: board[i][j].pieceFile = ReturnPiece.PieceFile.d; break;
+                case 4: board[i][j].pieceFile = ReturnPiece.PieceFile.e; break;
+                case 5: board[i][j].pieceFile = ReturnPiece.PieceFile.f; break;
+                case 6: board[i][j].pieceFile = ReturnPiece.PieceFile.g; break;
+                case 7: board[i][j].pieceFile = ReturnPiece.PieceFile.h; break;
+                default:
+		}
+	
+	}
+}
+board[0][0].pieceType = ReturnPiece.PieceType.WR; board[0][1].pieceType = ReturnPiece.PieceType.WN;
+
+
+
+}
 }
