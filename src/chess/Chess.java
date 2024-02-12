@@ -37,7 +37,7 @@ class ReturnPlay {
 
 public class Chess {
 	enum Player { white, black }
-	public ReturnPiece[][] board = new ReturnPiece[8][8];
+	public static ReturnPiece[][] board = new ReturnPiece[8][8];
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -61,37 +61,52 @@ public class Chess {
 	 * This method should reset the game, and start from scratch.
 	 */
 	public static void start() {
+		for (int i = 0; i < 8; i++){
+			for (int j = 0; j < 8; j++){
+				board[i][j] = new ReturnPiece();
+			}
+			
+		}
+		for (int i = 0; i <8; i++){
+			for (int j = 0; j < 8; j++){
+				board[i][j].pieceRank = i +1;
+				switch (j) {
+					case 0: board[i][j].pieceFile = ReturnPiece.PieceFile.a; break;
+					case 1: board[i][j].pieceFile = ReturnPiece.PieceFile.b; break;
+					case 2: board[i][j].pieceFile = ReturnPiece.PieceFile.c; break;
+					case 3: board[i][j].pieceFile = ReturnPiece.PieceFile.d; break;
+					case 4: board[i][j].pieceFile = ReturnPiece.PieceFile.e; break;
+					case 5: board[i][j].pieceFile = ReturnPiece.PieceFile.f; break;
+					case 6: board[i][j].pieceFile = ReturnPiece.PieceFile.g; break;
+					case 7: board[i][j].pieceFile = ReturnPiece.PieceFile.h; break;
+					default:
+			}
 		
+		}
+	}
+	board[0][0].pieceType = ReturnPiece.PieceType.WR; board[0][1].pieceType = ReturnPiece.PieceType.WN;
+	board[0][2].pieceType = ReturnPiece.PieceType.WB; board[0][3].pieceType = ReturnPiece.PieceType.WQ;
+	board[0][4].pieceType = ReturnPiece.PieceType.WK; board[0][5].pieceType = ReturnPiece.PieceType.WB; 
+	board[0][6].pieceType = ReturnPiece.PieceType.WN; board[0][7].pieceType = ReturnPiece.PieceType.WR;
+	
+	for (int i = 0; i <8; i++){
+		board[1][i].pieceType = ReturnPiece.PieceType.WP;
+	}
+	
+	board[7][0].pieceType = ReturnPiece.PieceType.BR; board[7][1].pieceType = ReturnPiece.PieceType.BN;
+	board[7][2].pieceType = ReturnPiece.PieceType.BB; board[7][3].pieceType = ReturnPiece.PieceType.BQ;
+	board[7][4].pieceType = ReturnPiece.PieceType.BK; board[7][5].pieceType = ReturnPiece.PieceType.BB; 
+	board[7][6].pieceType = ReturnPiece.PieceType.BN; board[7][7].pieceType = ReturnPiece.PieceType.BR;
+	
+	for (int i = 0; i <8; i++){
+		board[6][i].pieceType = ReturnPiece.PieceType.BP;
+	}
+	for (int i = 2; i <6; i++){
+		for (int j = 0; j <8; j++){
+			board[i][j].pieceType = null;
+		}
+	}
 		/* FILL IN THIS METHOD */
 }
 
-public void makeBoard(){
-	for (int i = 0; i < 8; i++){
-		for (int j = 0; j < 8; j++){
-			board[i][j] = new ReturnPiece();
-		}
-		
-	}
-	for (int i = 0; i <8; i++){
-		for (int j = 0; j < 8; j++){
-			board[i][j].pieceRank = i +1;
-			switch (j) {
-                case 0: board[i][j].pieceFile = ReturnPiece.PieceFile.a; break;
-                case 1: board[i][j].pieceFile = ReturnPiece.PieceFile.b; break;
-                case 2: board[i][j].pieceFile = ReturnPiece.PieceFile.c; break;
-                case 3: board[i][j].pieceFile = ReturnPiece.PieceFile.d; break;
-                case 4: board[i][j].pieceFile = ReturnPiece.PieceFile.e; break;
-                case 5: board[i][j].pieceFile = ReturnPiece.PieceFile.f; break;
-                case 6: board[i][j].pieceFile = ReturnPiece.PieceFile.g; break;
-                case 7: board[i][j].pieceFile = ReturnPiece.PieceFile.h; break;
-                default:
-		}
-	
-	}
-}
-board[0][0].pieceType = ReturnPiece.PieceType.WR; board[0][1].pieceType = ReturnPiece.PieceType.WN;
-
-
-
-}
 }

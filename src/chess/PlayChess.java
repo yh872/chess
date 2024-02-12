@@ -8,8 +8,6 @@ public class PlayChess {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
-        Chess c = new Chess();
-        c.makeBoard();
 		Chess.start();
 		String line = sc.nextLine();
 		while (!line.equals("quit")) {
