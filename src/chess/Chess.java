@@ -47,20 +47,72 @@ public class Chess {
 	 *         See the section "The Chess class" in the assignment description for details of
 	 *         the contents of the returned ReturnPlay instance.
 	 */
+	public static boolean white = true;
 	public static ReturnPlay play(String move) {
+		if (move.equals("reset")){
+			start();
+			ReturnPlay temp = generateReturnPlay();
+			temp.message = null;
+			return temp;
+			
+		}
+
 
 		/* FILL IN THIS METHOD */
-		
+		if (white){
+			if (!Helper.isWhitePiece(Helper.getRank(move), Helper.getFile(move))){
+				ReturnPlay temp = generateReturnPlay();
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			System.out.println(white);
+			return temp;
+			}
+		}
+		else{
+			if (!Helper.isBlackPiece(Helper.getRank(move), Helper.getFile(move))){
+				ReturnPlay temp = generateReturnPlay();
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			System.out.println(white);
+			return temp;
+		}
+	}
+	if (Helper.getSquare(Helper.getRank(move), Helper.getFile(move)).pieceType == null){
+		ReturnPlay temp = generateReturnPlay();
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return temp;
+	}
+		if (!Legal.isLegal(move)){
+			ReturnPlay temp = generateReturnPlay();
+			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return temp;
+		}
+		movePiece(move);
+		ReturnPlay temp = generateReturnPlay();
+		white = !white;
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null;
+
+
+		return temp;
 	}
-	
+	public static ReturnPlay generateReturnPlay(){
+		ReturnPlay temp = new ReturnPlay();
+		temp.message = null;
+		temp.piecesOnBoard = new ArrayList<>();
+		for (int i = 0; i < 8; i++){
+			for (int j = 0; j <8; j++){
+				if (board[i][j].pieceType != null){
+			temp.piecesOnBoard.add(board[i][j]);
+				}
+			}
+		}
+		return temp;
+	}
 	
 	/**
 	 * This method should reset the game, and start from scratch.
 	 */
 	public static void start() {
+		white = true;
 		for (int i = 0; i < 8; i++){
 			for (int j = 0; j < 8; j++){
 				board[i][j] = new ReturnPiece();
@@ -102,6 +154,20 @@ public class Chess {
 		board[6][i].pieceType = ReturnPiece.PieceType.BP;
 	}
 		/* FILL IN THIS METHOD */
+}
+
+
+
+public static void movePiece( String move ){
+	ReturnPiece.PieceType piece = Helper.curPieceType(move);
+	int initial_file = move.charAt(0) - 'a';
+	int initial_rank = Integer.parseInt(move.substring(1,2))-1;
+
+	int final_file = move.charAt(3) - 'a';
+	int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
+
+	board[initial_rank][initial_file].pieceType = null;
+	board[final_rank][final_file].pieceType = piece;
 }
 
 }
