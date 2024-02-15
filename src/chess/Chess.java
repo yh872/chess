@@ -49,8 +49,8 @@ public class Chess {
 	 */
 	public static boolean white = true;
 	public static ReturnPlay play(String move) {
-		if (move.equals("reset")){
-			start();
+		if (move.equals("reset")){ //resets the board
+			start(); 
 			ReturnPlay temp = generateReturnPlay();
 			temp.message = null;
 			return temp;
@@ -59,33 +59,31 @@ public class Chess {
 
 
 		/* FILL IN THIS METHOD */
-		if (white){
+		if (white){ //checks that the moving move piece is white
 			if (!Helper.isWhitePiece(Helper.getRank(move), Helper.getFile(move))){
 				ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
-			System.out.println(white);
 			return temp;
 			}
 		}
-		else{
+		else{ //checks that the moving piece is black
 			if (!Helper.isBlackPiece(Helper.getRank(move), Helper.getFile(move))){
 				ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
-			System.out.println(white);
 			return temp;
 		}
 	}
-	if (Helper.getSquare(Helper.getRank(move), Helper.getFile(move)).pieceType == null){
+	if (Helper.getSquare(Helper.getRank(move), Helper.getFile(move)).pieceType == null){ //checks if there is a piece on the initial square
 		ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			return temp;
 	}
-		if (!Legal.isLegal(move)){
+		if (!Legal.isLegal(move)){	//checks if the move is legal according to the rules of chess
 			ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			return temp;
 		}
-		movePiece(move);
+		movePiece(move); // completes the move and creates new board
 		ReturnPlay temp = generateReturnPlay();
 		white = !white;
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
@@ -94,7 +92,7 @@ public class Chess {
 
 		return temp;
 	}
-	public static ReturnPlay generateReturnPlay(){
+	public static ReturnPlay generateReturnPlay(){ //copies the board into the ReturnPlay object that will be returned by play method
 		ReturnPlay temp = new ReturnPlay();
 		temp.message = null;
 		temp.piecesOnBoard = new ArrayList<>();
@@ -111,7 +109,7 @@ public class Chess {
 	/**
 	 * This method should reset the game, and start from scratch.
 	 */
-	public static void start() {
+	public static void start() { 	// initializes the chess board
 		white = true;
 		for (int i = 0; i < 8; i++){
 			for (int j = 0; j < 8; j++){
@@ -158,7 +156,7 @@ public class Chess {
 
 
 
-public static void movePiece( String move ){
+public static void movePiece( String move ){ //moves a piece from one square to another
 	ReturnPiece.PieceType piece = Helper.curPieceType(move);
 	int initial_file = move.charAt(0) - 'a';
 	int initial_rank = Integer.parseInt(move.substring(1,2))-1;
