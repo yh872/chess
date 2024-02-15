@@ -5,6 +5,7 @@ public class Legal {
 
 
 public static boolean isLegal(String move){ //main legal method to check if a move follows the laws of chess
+    move = move.trim();
     ReturnPiece.PieceType p = Helper.curPieceType(move);
     switch (p){
         case WP:

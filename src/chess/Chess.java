@@ -49,12 +49,24 @@ public class Chess {
 	 */
 	public static boolean white = true;
 	public static ReturnPlay play(String move) {
+		move = move.trim();
+		boolean drawRequested = move.endsWith("draw?"); 
 		if (move.equals("reset")){ //resets the board
 			start(); 
 			ReturnPlay temp = generateReturnPlay();
 			temp.message = null;
 			return temp;
 			
+		}
+		if (move.equals("resign")){
+			ReturnPlay temp = generateReturnPlay();
+			if (white){
+			temp.message = ReturnPlay.Message.RESIGN_BLACK_WINS;
+			}
+			else{
+				temp.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
+			}
+			return temp;
 		}
 
 
@@ -63,7 +75,7 @@ public class Chess {
 			if (!Helper.isWhitePiece(Helper.getRank(move), Helper.getFile(move))){
 				ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
-			return temp;
+			 return temp;
 			}
 		}
 		else{ //checks that the moving piece is black
@@ -86,6 +98,7 @@ public class Chess {
 		movePiece(move); // completes the move and creates new board
 		ReturnPlay temp = generateReturnPlay();
 		white = !white;
+		if (drawRequested) temp.message = ReturnPlay.Message.DRAW;
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 
@@ -157,6 +170,7 @@ public class Chess {
 
 
 public static void movePiece( String move ){ //moves a piece from one square to another
+	move = move.trim();
 	ReturnPiece.PieceType piece = Helper.curPieceType(move);
 	int initial_file = move.charAt(0) - 'a';
 	int initial_rank = Integer.parseInt(move.substring(1,2))-1;

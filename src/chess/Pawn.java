@@ -3,6 +3,7 @@ package chess;
 public class Pawn {
     
     public static boolean isLegalPawnWhite(String move){ //determines if a white pawn move is legal
+        move = move.trim();
         int initial_file = move.charAt(0) - 'a';
         int initial_rank = Integer.parseInt(move.substring(1,2))-1;
     
@@ -33,6 +34,7 @@ public class Pawn {
     }
 
     public static boolean isLegalPawnBlack(String move){ //determines if a white pawn move is legal
+        move = move.trim();
         int initial_file = move.charAt(0) - 'a';
         int initial_rank = Integer.parseInt(move.substring(1,2))-1;
     
@@ -61,6 +63,7 @@ public class Pawn {
         return false;
 
     }
+    
     
     }//implement en passant in these methods
 

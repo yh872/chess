@@ -22,13 +22,16 @@ return false;
         return !isBlackPiece(rank, file); 
     }
     public static int getRank(String move){ //gets initial rank based on users input string
+        move = move.trim();
         return Integer.parseInt(move.substring(1,2))-1;
 
     }
 public static int getFile(String move){ //gets initial file based on users input string
+    move = move.trim();
     return move.charAt(0) - 'a';
 }
     public static ReturnPiece.PieceType curPieceType(String move){ //returns the current piece the user is trying to move
+        move = move.trim();
         int square_File = move.charAt(0) - 'a';
         int square_Rank = Integer.parseInt(move.substring(1,2))-1;
     
