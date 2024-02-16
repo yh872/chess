@@ -7,6 +7,9 @@ public class Knight {
         int initial_file = Helper.getFile(move);
         int final_file = move.charAt(3) - 'a';
         int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
+        if (Helper.isWhitePiece(final_rank, final_file)){
+            return false;
+        }
         if (final_rank == initial_rank + 1 && final_file == initial_file -2){
             return true;
         }
@@ -40,6 +43,9 @@ public class Knight {
         int initial_file = Helper.getFile(move);
         int final_file = move.charAt(3) - 'a';
         int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
+        if (Helper.isBlackPiece(final_rank, final_file)){
+            return false;
+        }
         if (final_rank == initial_rank + 1 && final_file == initial_file -2){
             return true;
         }

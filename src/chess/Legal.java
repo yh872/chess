@@ -16,6 +16,10 @@ public static boolean isLegal(String move){ //main legal method to check if a mo
         return Knight.isLegalKnightWhite(move);
         case BN:
         return Knight.isLegalKnightBlack(move);
+        case WK:
+        return King.isLegalKingWhite(move);
+        case BK:
+        return King.isLegalKingBlack(move);
 
         default:
         return false;

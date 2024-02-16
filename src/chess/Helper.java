@@ -10,6 +10,9 @@ public class Helper {
     
     public static boolean isBlackPiece(int rank, int file) { //returns if a piece in a certain file or square is black
     ReturnPiece piece = getSquare(rank, file);
+    if (piece.pieceType == null){
+        return false;
+    }
     if (piece.pieceType == ReturnPiece.PieceType.BB || piece.pieceType == ReturnPiece.PieceType.BK || 
     piece.pieceType == ReturnPiece.PieceType.BN || piece.pieceType == ReturnPiece.PieceType.BP ||
     piece.pieceType == ReturnPiece.PieceType.BQ || piece.pieceType == ReturnPiece.PieceType.BR){
@@ -19,6 +22,10 @@ return false;
     }
 
     public static boolean isWhitePiece(int rank, int file){ //returns if a piece in a certain file or square is black
+        ReturnPiece piece = getSquare(rank, file);
+        if (piece.pieceType == null){
+            return false;
+        }
         return !isBlackPiece(rank, file); 
     }
     public static int getRank(String move){ //gets initial rank based on users input string
