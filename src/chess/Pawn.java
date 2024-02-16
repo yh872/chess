@@ -65,7 +65,7 @@ public class Pawn {
     }
     
     
-    }//implement en passant in these methods
+    }//implement en passant and pawn promotion in these methods
 
 
 

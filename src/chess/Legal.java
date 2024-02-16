@@ -12,6 +12,10 @@ public static boolean isLegal(String move){ //main legal method to check if a mo
         return Pawn.isLegalPawnWhite(move);
         case BP:
         return Pawn.isLegalPawnBlack(move);
+        case WN:
+        return Knight.isLegalKnightWhite(move);
+        case BN:
+        return Knight.isLegalKnightBlack(move);
 
         default:
         return false;
