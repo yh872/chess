@@ -2,6 +2,9 @@ package chess;
 
 import java.util.ArrayList;
 
+import chess.ReturnPlay.Message;
+
+
 
 class ReturnPiece {
 	static enum PieceType {WP, WR, WN, WB, WQ, WK, 
@@ -38,6 +41,7 @@ class ReturnPlay {
 public class Chess {
 	enum Player { white, black }
 	public static ReturnPiece[][] board = new ReturnPiece[8][8];
+	public static ReturnPiece[][] previous_board = new ReturnPiece[8][8];
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -49,6 +53,15 @@ public class Chess {
 	 */
 	public static boolean white = true;
 	public static ReturnPlay play(String move) {
+		ReturnPiece[][] old_board = new ReturnPiece[8][8];
+		for (int i = 0; i <8; i++){
+			for (int j = 0; j <8; j++){
+				old_board[i][j] = new ReturnPiece();
+				old_board[i][j].pieceType = board[i][j].pieceType;
+				old_board[i][j].pieceFile = board[i][j].pieceFile;
+				old_board[i][j].pieceRank = board[i][j].pieceRank;
+			}
+		}
 		move = move.trim();
 		boolean drawRequested = move.endsWith("draw?"); 
 		if (move.equals("resign")){
@@ -61,8 +74,6 @@ public class Chess {
 			}
 			return temp;
 		}
-
-
 		/* FILL IN THIS METHOD */
 		if (white){ //checks that the moving move piece is white
 			if (!Helper.isWhitePiece(Helper.getRank(move), Helper.getFile(move))){
@@ -88,10 +99,49 @@ public class Chess {
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			return temp;
 		}
-		movePiece(move); // completes the move and creates new board
+		
+		movePiece(move); //completes move
 		ReturnPlay temp = generateReturnPlay();
+		if (white && Check.isCheckWhite(temp.piecesOnBoard)){
+			ReturnPlay t1 = new ReturnPlay();
+			t1.message = Message.ILLEGAL_MOVE;
+			
+			t1.piecesOnBoard = new ArrayList<>();
+			for (int i = 0; i < 8; i++){
+				for (int j = 0; j <8; j++){
+					board[i][j].pieceType = old_board[i][j].pieceType;
+					if (old_board[i][j].pieceType != null){
+				t1.piecesOnBoard.add(old_board[i][j]);
+					}
+				}
+			}
+			return t1;
+
+		}
+		if (!white && Check.isCheckBlack(temp.piecesOnBoard)){
+			ReturnPlay t2 = new ReturnPlay();
+			t2.piecesOnBoard = new ArrayList<>();
+			t2.message = Message.ILLEGAL_MOVE;
+			for (int i = 0; i < 8; i++){
+				for (int j = 0; j <8; j++){
+					board[i][j].pieceType = old_board[i][j].pieceType;
+					if (old_board[i][j].pieceType != null){
+				t2.piecesOnBoard.add(old_board[i][j]);
+					}
+				}
+			}
+			return t2;
+			
+	}
+	if (white && Check.isCheckBlack(temp.piecesOnBoard)){
+		temp.message = Message.CHECK;
+	}
+	if (!white && Check.isCheckWhite(temp.piecesOnBoard)){
+		temp.message = Message.CHECK;
+	}
 		white = !white;
 		if (drawRequested) temp.message = ReturnPlay.Message.DRAW;
+
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 
@@ -171,8 +221,31 @@ public static void movePiece( String move ){ //moves a piece from one square to 
 	int final_file = move.charAt(3) - 'a';
 	int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
 
+
 	board[initial_rank][initial_file].pieceType = null;
 	board[final_rank][final_file].pieceType = piece;
+
 }
 
+public static void undomove( String move ){ //moves a piece from one square to another
+	move = move.trim();
+	int initial_file = move.charAt(0) - 'a';
+	int initial_rank = Integer.parseInt(move.substring(1,2))-1;
+
+	int final_file = move.charAt(3) - 'a';
+	int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
+	ReturnPiece p = Helper.getSquare(final_rank, final_file);
+
+	board[initial_rank][initial_file].pieceType = p.pieceType;
+	board[final_rank][final_file].pieceType = null;
+}
+public static void setPreviousBoard(ReturnPiece[][] b){
+
+	for (int i = 0; i <8; i++){
+		for (int j = 0; j <8; j++){
+			previous_board[i][j] = b[i][j];
+		}
+	}
+}
+ 
 }

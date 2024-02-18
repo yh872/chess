@@ -8,7 +8,6 @@ public class Rook {
         int final_file = move.charAt(3) - 'a';
         int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
         if (Helper.isWhitePiece(final_rank, final_file)){
-            System.out.println("is white piece");
             return false;
         }
         if (initial_rank == final_rank || initial_file == final_file){
@@ -23,6 +22,7 @@ public class Rook {
                     tempFile--;
 
                 }
+
                 return true;
             }
             else if (initial_rank == final_rank && initial_file < final_file){
@@ -33,21 +33,23 @@ public class Rook {
                     }
                     tempFile++;
                 }
+           
                 return true;
             }
             else if (initial_file == final_file && initial_rank > final_rank){
                 tempRank--;
-                while (tempFile != final_file){
+                while (tempRank != final_file){
                     if (!Helper.isEmptySquare(tempRank, tempFile)){
                         return false;
                     }
                     tempRank--;
                 }
+                System.out.println("fail3");
                 return true;
             }
             else if (initial_file == final_file && initial_rank < final_rank){
                 tempRank++;
-                while (tempFile != final_file){
+                while (tempRank != final_rank){
                     if (!Helper.isEmptySquare(tempRank, tempFile)){
                         return false;
                     }
@@ -64,8 +66,7 @@ public class Rook {
         int initial_file = Helper.getFile(move);
         int final_file = move.charAt(3) - 'a';
         int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
-        if (Helper.isWhitePiece(final_rank, final_file)){
-            System.out.println("is white piece");
+        if (Helper.isBlackPiece(final_rank, final_file)){
             return false;
         }
         if (initial_rank == final_rank || initial_file == final_file){
@@ -94,7 +95,7 @@ public class Rook {
             }
             else if (initial_file == final_file && initial_rank > final_rank){
                 tempRank--;
-                while (tempFile != final_file){
+                while (tempRank != final_rank){
                     if (!Helper.isEmptySquare(tempRank, tempFile)){
                         return false;
                     }
@@ -104,7 +105,7 @@ public class Rook {
             }
             else if (initial_file == final_file && initial_rank < final_rank){
                 tempRank++;
-                while (tempFile != final_file){
+                while (tempRank != final_rank){
                     if (!Helper.isEmptySquare(tempRank, tempFile)){
                         return false;
                     }

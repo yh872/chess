@@ -1,5 +1,10 @@
 package chess;
 
+import java.util.ArrayList;
+
+import chess.ReturnPiece.PieceFile;
+import chess.ReturnPiece.PieceType;
+
 public class Helper {
     public static boolean isEmptySquare(int rank, int file){ //returns if a square is empty or not
         return Chess.board[rank][file].pieceType == null;
@@ -33,9 +38,17 @@ return false;
         return Integer.parseInt(move.substring(1,2))-1;
 
     }
+    public static int getFinalRank(String move){
+        move = move.trim();
+        return Integer.parseInt(move.substring(4, 5)) -1;
+    }
 public static int getFile(String move){ //gets initial file based on users input string
     move = move.trim();
     return move.charAt(0) - 'a';
+}
+public static int getFinalFile(String move){ //gets initial file based on users input string
+    move = move.trim();
+    return move.charAt(3) - 'a';
 }
     public static ReturnPiece.PieceType curPieceType(String move){ //returns the current piece the user is trying to move
         move = move.trim();
@@ -45,5 +58,27 @@ public static int getFile(String move){ //gets initial file based on users input
         ReturnPiece.PieceType piece = Chess.board[square_Rank][square_File].pieceType;
         return piece;
     
+    }
+
+    public static ReturnPiece getWhiteKingSquare(ArrayList<ReturnPiece> returnPlay){
+        for (int i = 0; i < returnPlay.size(); i++){
+            if (returnPlay.get(i).pieceType == PieceType.WK){
+                return returnPlay.get(i);
+            }
+        }
+       return null;
+    }
+    public static ReturnPiece getBlackKingSquare(ArrayList<ReturnPiece> returnPlay){
+        for (int i = 0; i < returnPlay.size(); i++){
+            if (returnPlay.get(i).pieceType == PieceType.BK){
+                return returnPlay.get(i);
+            }
+        }
+       return null;
+    }
+    public static String generateMoveString(int initial_rank, PieceFile initial_file, int final_rank, PieceFile final_file){
+        char initialFileChar = (char) ('a' + initial_file.ordinal());
+        char finalFileChar = (char) ('a' + final_file.ordinal());
+        return "" + initialFileChar + (initial_rank) + " " + finalFileChar + (final_rank);
     }
 }
