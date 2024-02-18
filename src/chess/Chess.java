@@ -51,13 +51,6 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 		move = move.trim();
 		boolean drawRequested = move.endsWith("draw?"); 
-		if (move.equals("reset")){ //resets the board
-			start(); 
-			ReturnPlay temp = generateReturnPlay();
-			temp.message = null;
-			return temp;
-			
-		}
 		if (move.equals("resign")){
 			ReturnPlay temp = generateReturnPlay();
 			if (white){
