@@ -41,11 +41,4 @@ public class Check {
         return false;
         
     }
-    public static boolean isCheckmateWhite(ReturnPiece[][] board){
-        return false;
-    }
-
-    public static boolean isCheckmateBlack(ReturnPiece[][] board){
-        return false;
-    }
 }

@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 
+import chess.ReturnPiece.PieceFile;
 import chess.ReturnPlay.Message;
 
 
@@ -53,15 +54,7 @@ public class Chess {
 	 */
 	public static boolean white = true;
 	public static ReturnPlay play(String move) {
-		ReturnPiece[][] old_board = new ReturnPiece[8][8];
-		for (int i = 0; i <8; i++){
-			for (int j = 0; j <8; j++){
-				old_board[i][j] = new ReturnPiece();
-				old_board[i][j].pieceType = board[i][j].pieceType;
-				old_board[i][j].pieceFile = board[i][j].pieceFile;
-				old_board[i][j].pieceRank = board[i][j].pieceRank;
-			}
-		}
+		ReturnPiece[][] old_board = setPreviousBoard();
 		move = move.trim();
 		boolean drawRequested = move.endsWith("draw?"); 
 		if (move.equals("resign")){
@@ -109,12 +102,12 @@ public class Chess {
 			t1.piecesOnBoard = new ArrayList<>();
 			for (int i = 0; i < 8; i++){
 				for (int j = 0; j <8; j++){
-					board[i][j].pieceType = old_board[i][j].pieceType;
 					if (old_board[i][j].pieceType != null){
 				t1.piecesOnBoard.add(old_board[i][j]);
 					}
 				}
 			}
+			undomove(old_board);
 			return t1;
 
 		}
@@ -124,20 +117,70 @@ public class Chess {
 			t2.message = Message.ILLEGAL_MOVE;
 			for (int i = 0; i < 8; i++){
 				for (int j = 0; j <8; j++){
-					board[i][j].pieceType = old_board[i][j].pieceType;
 					if (old_board[i][j].pieceType != null){
 				t2.piecesOnBoard.add(old_board[i][j]);
 					}
 				}
 			}
+			undomove(old_board);
 			return t2;
 			
-	}
+	} 
 	if (white && Check.isCheckBlack(temp.piecesOnBoard)){
-		temp.message = Message.CHECK;
+
+		old_board = setPreviousBoard();
+		for (ReturnPiece piece: temp.piecesOnBoard){
+			if (Helper.isBlack(piece)){
+			for (int i = 1; i <=8; i++){
+				for (PieceFile file : PieceFile.values()){
+					if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+						movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+						temp = generateReturnPlay();
+						if (!Check.isCheckBlack(temp.piecesOnBoard)){
+							undomove(old_board);
+							ReturnPlay t1 = generateReturnPlay();
+							t1.message = Message.CHECK;
+							white = !white;
+							return t1;
+
+						}
+						undomove(old_board);
+					}
+				}
+			}
+		}
+		}
+
+		temp = generateReturnPlay();
+		temp.message = Message.CHECKMATE_WHITE_WINS;
+		
 	}
 	if (!white && Check.isCheckWhite(temp.piecesOnBoard)){
-		temp.message = Message.CHECK;
+		old_board = setPreviousBoard();
+		for (ReturnPiece piece: temp.piecesOnBoard){
+			if (Helper.isWhite(piece)){
+				for (int i = 1; i <=8; i++){
+					for (PieceFile file : PieceFile.values()){
+						if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+							movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+							temp = generateReturnPlay();
+							if (!Check.isCheckWhite(temp.piecesOnBoard)){
+								undomove(old_board);
+								ReturnPlay t1 = generateReturnPlay();
+								t1.message = Message.CHECK;
+								white = !white;
+								return t1;
+	
+							}
+							undomove(old_board);
+						}
+					}
+				}
+			}
+			}
+	
+			temp = generateReturnPlay();
+			temp.message = Message.CHECKMATE_BLACK_WINS;
 	}
 		white = !white;
 		if (drawRequested) temp.message = ReturnPlay.Message.DRAW;
@@ -227,25 +270,25 @@ public static void movePiece( String move ){ //moves a piece from one square to 
 
 }
 
-public static void undomove( String move ){ //moves a piece from one square to another
-	move = move.trim();
-	int initial_file = move.charAt(0) - 'a';
-	int initial_rank = Integer.parseInt(move.substring(1,2))-1;
-
-	int final_file = move.charAt(3) - 'a';
-	int final_rank = Integer.parseInt(move.substring(4, 5)) -1;
-	ReturnPiece p = Helper.getSquare(final_rank, final_file);
-
-	board[initial_rank][initial_file].pieceType = p.pieceType;
-	board[final_rank][final_file].pieceType = null;
-}
-public static void setPreviousBoard(ReturnPiece[][] b){
-
-	for (int i = 0; i <8; i++){
+public static void undomove( ReturnPiece[][] old_board ){ //moves a piece from one square to another
+	for (int i = 0; i < 8; i++){
 		for (int j = 0; j <8; j++){
-			previous_board[i][j] = b[i][j];
+			board[i][j].pieceType = old_board[i][j].pieceType;
 		}
 	}
+}
+public static ReturnPiece[][] setPreviousBoard(){
+
+	ReturnPiece[][] old_board = new ReturnPiece[8][8];
+		for (int i = 0; i <8; i++){
+			for (int j = 0; j <8; j++){
+				old_board[i][j] = new ReturnPiece();
+				old_board[i][j].pieceType = board[i][j].pieceType;
+				old_board[i][j].pieceFile = board[i][j].pieceFile;
+				old_board[i][j].pieceRank = board[i][j].pieceRank;
+			}
+		}
+		return old_board;
 }
  
 }

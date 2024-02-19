@@ -81,4 +81,29 @@ public static int getFinalFile(String move){ //gets initial file based on users 
         char finalFileChar = (char) ('a' + final_file.ordinal());
         return "" + initialFileChar + (initial_rank) + " " + finalFileChar + (final_rank);
     }
+    public static boolean isBlack(ReturnPiece piece){
+        if (piece.pieceType.equals(null)){
+            return false;
+        }
+        if (piece.pieceType == ReturnPiece.PieceType.BB || piece.pieceType == ReturnPiece.PieceType.BK || 
+        piece.pieceType == ReturnPiece.PieceType.BN || piece.pieceType == ReturnPiece.PieceType.BP ||
+        piece.pieceType == ReturnPiece.PieceType.BQ || piece.pieceType == ReturnPiece.PieceType.BR){
+            return true;    
+
+        }
+        return false;
+        
+    }
+    public static boolean isWhite(ReturnPiece piece){
+        if (piece.pieceType == null){
+            return false;
+        }
+        if (piece.pieceType == ReturnPiece.PieceType.WB || piece.pieceType == ReturnPiece.PieceType.WK || 
+        piece.pieceType == ReturnPiece.PieceType.WN || piece.pieceType == ReturnPiece.PieceType.WP ||
+        piece.pieceType == ReturnPiece.PieceType.WQ || piece.pieceType == ReturnPiece.PieceType.WR){
+            return true;    
+
+        }
+        return false;
+    }
 }
