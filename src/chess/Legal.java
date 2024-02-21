@@ -7,7 +7,10 @@ public class Legal {
 public static boolean isLegal(String move){ //main legal method to check if a move follows the laws of chess
     move = move.trim();
     ReturnPiece.PieceType p = Helper.curPieceType(move);
+    System.out.println(p);
     switch (p){
+        case WQ:
+        return Queen.isLegalQueenWhite(move);
         case WP:
         return Pawn.isLegalPawnWhite(move);
         case BP:
@@ -28,14 +31,16 @@ public static boolean isLegal(String move){ //main legal method to check if a mo
         return Rook.isLegalRookWhite(move);
         case BR:
         return Rook.isLegalRookBlack(move);
-        case WQ:
-        return Queen.isLegalQueenWhite(move);
         case BQ:
         return Queen.isLegalQueenBlack(move);
 
         default:
         return false;
+        
+
     }
+    
+
 } //this method will look for moves that are not possible based on the 
 
 }

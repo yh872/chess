@@ -1,5 +1,8 @@
 package chess;
 
+
+import chess.ReturnPiece.PieceType;
+
 public class King {
     public static boolean isLegalKingWhite(String move){
         move = move.trim();
@@ -31,10 +34,36 @@ public class King {
 
         return false;
     }
-    public static boolean CanCastleWhite(ReturnPiece[][] board){
+    public static boolean WhiteCastleKingsideLegal(String move){
+       if (move.equals("e1 g1")){
+            if (Helper.curPieceType(move) == PieceType.WK){
+                return true;
+            }
+       }
         return false;
     }
-    public static boolean CanCastleBlack(ReturnPiece[][] board){
-        return false;
-    }
+    public static boolean WhiteCastleQueensSide(String move){
+        if (move.equals("e1 c1")){
+             if (Helper.curPieceType(move) == PieceType.WK){
+                 return true;
+             }
+        }
+         return false;
+     }
+     public static boolean BlackCastleKingSide(String move){
+        if (move.equals("e8 g8")){
+             if (Helper.curPieceType(move) == PieceType.BK){
+                 return true;
+             }
+        }
+         return false;
+     }
+     public static boolean BlackCastleQueenSide(String move){
+        if (move.equals("e8 c8")){
+             if (Helper.curPieceType(move) == PieceType.BK){
+                 return true;
+             }
+        }
+         return false;
+     }
 }
