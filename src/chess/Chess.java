@@ -99,7 +99,6 @@ public class Chess {
 	if (Helper.getSquare(Helper.getRank(move), Helper.getFile(move)).pieceType == null){ //checks if there is a piece on the initial square
 		ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
-			System.out.println("c");
 			return temp;
 	}
 	//castling implemented here
@@ -135,7 +134,9 @@ public class Chess {
 				if (Check.isCheckBlack(temp.piecesOnBoard)){
 					temp.message = Message.CHECK;
 				}
-				
+				if (drawRequested){
+					temp.message = Message.DRAW;
+				}
 				//extremely unlikely for there to be a checkmate by a castling, so wont implement it
 				White_Kinghasmoved = true;
        			 White_KingRookhasmoved = true;
@@ -156,7 +157,6 @@ public class Chess {
 				if (Check.isCheckWhite(t1.piecesOnBoard)){
 					undomove(old_board);
 					t1 = generateReturnPlay();
-					System.out.println("here 1");
 					t1.message = Message.ILLEGAL_MOVE;
 					return t1;
 
@@ -170,7 +170,6 @@ public class Chess {
 				t1 = generateReturnPlay();
 
 				t1.message = Message.ILLEGAL_MOVE;
-				System.out.println("here 2");
 				return t1;
 
 			}
@@ -182,6 +181,11 @@ public class Chess {
 			if (Check.isCheckBlack(t1.piecesOnBoard)){
 				t1.message = Message.CHECK;
 			}
+			if (drawRequested){
+				t1.message = Message.DRAW;
+			}
+			White_Kinghasmoved = true;
+			White_QueenRookhasmoved = true;
 			white = !white;
 			return t1;
 
@@ -224,6 +228,9 @@ public class Chess {
 			
 			if (Check.isCheckWhite(temp.piecesOnBoard)){
 				temp.message = Message.CHECK;
+			}
+			if (drawRequested){
+				temp.message = Message.DRAW;
 			}
 			
 			//extremely unlikely for there to be a checkmate by a castling, so wont implement it
@@ -271,6 +278,9 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 		t1 = generateReturnPlay();
 		if (Check.isCheckWhite(t1.piecesOnBoard)){
 			t1.message = Message.CHECK;
+		}
+		if (drawRequested){
+			t1.message = Message.DRAW;
 		}
 		white = !white;
 		return t1;
@@ -430,7 +440,12 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 						if (!Check.isCheckBlack(temp.piecesOnBoard)){
 							undomove(old_board);
 							ReturnPlay t1 = generateReturnPlay();
-							t1.message = Message.CHECK;
+							if (!drawRequested){
+								t1.message = Message.CHECK;
+								}
+								else{
+									t1.message = Message.DRAW;
+								}
 							white = !white;
 							return t1;
 
@@ -459,7 +474,12 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 							if (!Check.isCheckWhite(temp.piecesOnBoard)){
 								undomove(old_board);
 								ReturnPlay t1 = generateReturnPlay();
+								if (!drawRequested){
 								t1.message = Message.CHECK;
+								}
+								else{
+									t1.message = Message.DRAW;
+								}
 								white = !white;
 								return t1;
 	
