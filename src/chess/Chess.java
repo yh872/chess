@@ -60,8 +60,14 @@ public class Chess {
 	public static boolean Black_Kinghasmoved = false;
 	public static boolean Black_KingRookhasmoved = false;
 	public static boolean Black_QueenRookhasmoved = false;
+	public static ReturnPiece EnPessantPawn = null;
+	public static int EnPessantmoveTracker = 0;
 
 	public static ReturnPlay play(String move) {
+		if (EnPessantmoveTracker >1){
+			EnPessantPawn = null;
+			EnPessantmoveTracker = 0;
+		}
 		ReturnPiece[][] old_board = setPreviousBoard();
 		move = move.trim();
 		boolean drawRequested = move.endsWith("draw?"); 
@@ -83,6 +89,7 @@ public class Chess {
 			}
 		}
 		else{ //checks that the moving piece is black
+			
 			if (!Helper.isBlackPiece(Helper.getRank(move), Helper.getFile(move))){
 				ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -92,6 +99,7 @@ public class Chess {
 	if (Helper.getSquare(Helper.getRank(move), Helper.getFile(move)).pieceType == null){ //checks if there is a piece on the initial square
 		ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			System.out.println("c");
 			return temp;
 	}
 	//castling implemented here
@@ -272,14 +280,12 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 	else{
 		ReturnPlay p1 = generateReturnPlay();
 			p1.message = Message.ILLEGAL_MOVE;
-			System.out.println("here 3");
 			return p1;
 
 	}
 }
 
 		if (!Legal.isLegal(move)){
-			System.out.println("in here");
 			ReturnPlay temp = generateReturnPlay();
 			temp.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			return temp;
@@ -306,6 +312,26 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 
 			}
 		}
+		if (Promotion.PromotionBlack(move)){
+			if (move.length() == 5){
+				board[Helper.getRank(move)][Helper.getFile(move)].pieceType = PieceType.BQ;
+			}
+			else{
+				if (move.charAt(6) == 'N'){
+					board[Helper.getRank(move)][Helper.getFile(move)].pieceType = PieceType.BN;
+				}
+				if (move.charAt(6) == 'B'){
+					board[Helper.getRank(move)][Helper.getFile(move)].pieceType = PieceType.BB;
+				}
+				if (move.charAt(6) == 'R'){
+					board[Helper.getRank(move)][Helper.getFile(move)].pieceType = PieceType.BR;
+				}
+				if (move.charAt(6) == 'Q'){
+					board[Helper.getRank(move)][Helper.getFile(move)].pieceType = PieceType.BQ;
+				}
+
+			}
+		}
 		
 		movePiece(move); //completes move
 		ReturnPlay temp = generateReturnPlay();
@@ -321,6 +347,7 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 				}
 			}
 			undomove(old_board);
+			t1.message = Message.ILLEGAL_MOVE;
 			return t1;
 
 		}
@@ -361,9 +388,37 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 		Black_KingRookhasmoved = true;
 	}
 		//implements check/checkmate for white
+		if (Helper.getRank(move) == 1 && Helper.getFinalRank(move) == 3 && Helper.getSquare(3, Helper.getFile(move) ).pieceType == PieceType.WP){
+			int file = Helper.getFinalFile(move);
+			EnPessantPawn = board[3][file];
+			EnPessantmoveTracker = 0;
+		}
+	
+
+		if (Helper.getRank(move) == 6 && Helper.getFinalRank(move) == 4 && Helper.getSquare(4, Helper.getFile(move) ).pieceType == PieceType.BP){
+			int file = Helper.getFinalFile(move);
+			EnPessantPawn = board[4][file];
+			EnPessantmoveTracker = 0;
+		}
+		if (EnPessantPawn !=null){
+		if (EnPessantPawn.pieceType != null){
+			EnPessantmoveTracker++;
+		}
+	}
+		if (EnPessantPawn != null){
+			if (Helper.getFinalRank(move) == 5 && Helper.getFinalFile(move) == Helper.FileToInt(EnPessantPawn.pieceFile) 
+			&& board[Helper.getFinalRank(move)][Helper.getFinalFile(move)].pieceType == PieceType.WP){
+				board[4][Helper.getFinalFile(move)].pieceType = null;
+				temp = generateReturnPlay();
+			}
+			if (Helper.getFinalRank(move) == 2 && Helper.getFinalFile(move) == Helper.FileToInt(EnPessantPawn.pieceFile) 
+			&& board[Helper.getFinalRank(move)][Helper.getFinalFile(move)].pieceType == PieceType.BP){
+				board[3][Helper.getFinalFile(move)].pieceType = null;
+				temp = generateReturnPlay();
+			}
+		}
 	
 	if (white && Check.isCheckBlack(temp.piecesOnBoard)){
-		System.out.println("entered isCheckblack");
 		old_board = setPreviousBoard();
 		for (ReturnPiece piece: temp.piecesOnBoard){
 			if (Helper.isBlack(piece)){
@@ -393,7 +448,6 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 		
 	}
 	if (!white && Check.isCheckWhite(temp.piecesOnBoard)){
-		System.out.println("entered isCheckWhite");
 		old_board = setPreviousBoard();
 		for (ReturnPiece piece: temp.piecesOnBoard){
 			if (Helper.isWhite(piece)){
@@ -423,11 +477,8 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 	
 		white = !white;
 		if (drawRequested) temp.message = ReturnPlay.Message.DRAW;
-
-		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
-		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-
-
+		
+		
 		return temp;
 	}
 	public static ReturnPlay generateReturnPlay(){ //copies the board into the ReturnPlay object that will be returned by play method
@@ -455,6 +506,8 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 	 Black_Kinghasmoved = false;
 	Black_KingRookhasmoved = false;
 	 Black_QueenRookhasmoved = false;
+	 EnPessantPawn = null;
+	 EnPessantmoveTracker = 0;
 		for (int i = 0; i < 8; i++){
 			for (int j = 0; j < 8; j++){
 				board[i][j] = new ReturnPiece();

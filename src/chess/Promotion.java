@@ -11,5 +11,13 @@ public class Promotion {
         
         return false;
     }
+    public static boolean PromotionBlack(String move){
+        move = move.trim();
+        if (Helper.getRank(move) == 1 && Helper.curPieceType(move) == PieceType.BP  ){
+            return true;
+        }
+        
+        return false;
+    }
 }
 
