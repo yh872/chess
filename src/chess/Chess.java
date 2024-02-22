@@ -1,3 +1,4 @@
+//Youssef Hanna and Victoria Permakoff
 package chess;
 
 import java.util.ArrayList;
