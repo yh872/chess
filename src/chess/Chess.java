@@ -133,12 +133,39 @@ public class Chess {
 				}
 				
 				if (Check.isCheckBlack(temp.piecesOnBoard)){
-					temp.message = Message.CHECK;
+					old_board = setPreviousBoard();
+		for (ReturnPiece piece: temp.piecesOnBoard){
+			if (Helper.isBlack(piece)){
+			for (int i = 1; i <=8; i++){
+				for (PieceFile file : PieceFile.values()){
+					if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+						movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+						temp = generateReturnPlay();
+						if (!Check.isCheckBlack(temp.piecesOnBoard)){
+							undomove(old_board);
+							ReturnPlay z1 = generateReturnPlay();
+							if (!drawRequested){
+								z1.message = Message.CHECK;
+								}
+								else{
+									z1.message = Message.DRAW;
+								}
+							white = !white;
+							return z1;
+
+						}
+						undomove(old_board);
+					}
+				}
+			}
+		}
+		}
+		temp = generateReturnPlay();
+		temp.message = Message.CHECKMATE_WHITE_WINS;
 				}
 				if (drawRequested){
 					temp.message = Message.DRAW;
 				}
-				//extremely unlikely for there to be a checkmate by a castling, so wont implement it
 				White_Kinghasmoved = true;
        			 White_KingRookhasmoved = true;
 				white = !white;
@@ -180,7 +207,37 @@ public class Chess {
 			White_QueenRookhasmoved = true;
 			t1 = generateReturnPlay();
 			if (Check.isCheckBlack(t1.piecesOnBoard)){
-				t1.message = Message.CHECK;
+				old_board = setPreviousBoard();
+		for (ReturnPiece piece: t1.piecesOnBoard){
+			if (Helper.isBlack(piece)){
+			for (int i = 1; i <=8; i++){
+				for (PieceFile file : PieceFile.values()){
+					if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+						movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+						t1 = generateReturnPlay();
+						if (!Check.isCheckBlack(t1.piecesOnBoard)){
+							undomove(old_board);
+							ReturnPlay d1 = generateReturnPlay();
+							if (!drawRequested){
+								d1.message = Message.CHECK;
+								}
+								else{
+									d1.message = Message.DRAW;
+								}
+							white = !white;
+							return d1;
+
+						}
+						undomove(old_board);
+					}
+				}
+			}
+		}
+		}
+
+		t1 = generateReturnPlay();
+		t1.message = Message.CHECKMATE_WHITE_WINS;
+		
 			}
 			if (drawRequested){
 				t1.message = Message.DRAW;
@@ -195,7 +252,6 @@ public class Chess {
 		else{
 			ReturnPlay p1 = generateReturnPlay();
 				p1.message = Message.ILLEGAL_MOVE;
-				System.out.println("here 3");
 				return p1;
 
 		}
@@ -219,26 +275,53 @@ public class Chess {
 			if (Check.isCheckBlack(temp.piecesOnBoard)){
 				board[7][6].pieceType = null;
 			board[7][5].pieceType = null;
-			board[7][4].pieceType = PieceType.WK;
-			board[7][7].pieceType = PieceType.WR;
+			board[7][4].pieceType = PieceType.BK;
+			board[7][7].pieceType = PieceType.BR;
 				temp = generateReturnPlay();
 				temp.message = Message.ILLEGAL_MOVE;
 				return temp;
 
 			}
-			
-			if (Check.isCheckWhite(temp.piecesOnBoard)){
-				temp.message = Message.CHECK;
+			ReturnPlay a = generateReturnPlay();
+			if (Check.isCheckWhite(a.piecesOnBoard)){
+				old_board = setPreviousBoard();
+		for (ReturnPiece piece: a.piecesOnBoard){
+			if (Helper.isWhite(piece)){
+				for (int i = 1; i <=8; i++){
+					for (PieceFile file : PieceFile.values()){
+						if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+							movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+							a = generateReturnPlay();
+							if (!Check.isCheckWhite(a.piecesOnBoard)){
+								undomove(old_board);
+								ReturnPlay m = generateReturnPlay();
+								if (!drawRequested){
+								m.message = Message.CHECK;
+								}
+								else{
+									m.message = Message.DRAW;
+								}
+								white = !white;
+								return m;
+	
+							}
+							undomove(old_board);
+						}
+					}
+				}
+			}
+			}
+	
+			 a = generateReturnPlay();
+			a.message = Message.CHECKMATE_BLACK_WINS;
 			}
 			if (drawRequested){
-				temp.message = Message.DRAW;
+				a.message = Message.DRAW;
 			}
-			
-			//extremely unlikely for there to be a checkmate by a castling, so wont implement it
 			Black_Kinghasmoved = true;
 				Black_KingRookhasmoved = true;
 			white = !white;
-			return temp;
+			return a;
 
 		}
 		else{
@@ -254,7 +337,6 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 			if (Check.isCheckWhite(t1.piecesOnBoard)){
 				undomove(old_board);
 				t1 = generateReturnPlay();
-				System.out.println("here 1");
 				t1.message = Message.ILLEGAL_MOVE;
 				return t1;
 
@@ -268,7 +350,7 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 			t1 = generateReturnPlay();
 
 			t1.message = Message.ILLEGAL_MOVE;
-			System.out.println("here 2");
+	
 			return t1;
 
 		}
@@ -276,17 +358,47 @@ if (move.equals("e8 c8") && !Black_Kinghasmoved && !Black_QueenRookhasmoved && !
 		board[7][0].pieceType = null;
 		Black_Kinghasmoved = true;
 		Black_QueenRookhasmoved = true;
-		t1 = generateReturnPlay();
-		if (Check.isCheckWhite(t1.piecesOnBoard)){
-			t1.message = Message.CHECK;
-		}
-		if (drawRequested){
-			t1.message = Message.DRAW;
-		}
-		white = !white;
-		return t1;
-
+		ReturnPlay a = generateReturnPlay();
+			if (Check.isCheckWhite(a.piecesOnBoard)){
+				old_board = setPreviousBoard();
+		for (ReturnPiece piece: a.piecesOnBoard){
+			if (Helper.isWhite(piece)){
+				for (int i = 1; i <=8; i++){
+					for (PieceFile file : PieceFile.values()){
+						if (Legal.isLegal(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file))){
+							movePiece(Helper.generateMoveString(piece.pieceRank, piece.pieceFile, i, file));
+							a = generateReturnPlay();
+							if (!Check.isCheckWhite(a.piecesOnBoard)){
+								undomove(old_board);
+								ReturnPlay m = generateReturnPlay();
+								if (!drawRequested){
+								m.message = Message.CHECK;
+								}
+								else{
+									m.message = Message.DRAW;
+								}
+								white = !white;
+								return m;
 	
+							}
+							undomove(old_board);
+						}
+					}
+				}
+			}
+			}
+	
+			 a = generateReturnPlay();
+			a.message = Message.CHECKMATE_BLACK_WINS;
+			}
+			if (drawRequested){
+				a.message = Message.DRAW;
+			}
+			Black_Kinghasmoved = true;
+				Black_KingRookhasmoved = true;
+			white = !white;
+			return a;
+
 	}
 	else{
 		ReturnPlay p1 = generateReturnPlay();
